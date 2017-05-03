@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +15,16 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const path = require('path')
+const path = require('path');
 
-const Destroyable = require('../Destroyable')
-const Utilities = require('../util/Utilities')
+const Destroyable = require('../Destroyable');
+const Utilities = require('../util/Utilities');
 
-const _codec = Symbol('codec')
-const _filePath = Symbol('filePath')
-const _format = Symbol('format')
+const _codec = Symbol('codec');
+const _filePath = Symbol('filePath');
+const _format = Symbol('format');
 
 /**
  * Reads useful information and content from a media file.
@@ -41,15 +42,15 @@ class MediaReader extends Destroyable {
    * @public
    */
   constructor(filePath, options) {
-    super()
+    super();
 
     if (options == null) {
-      options = {}
+      options = {};
     }
 
-    this[_filePath] = filePath
-    this[_codec] = options.codec
-    this[_format] = options.format
+    this[_filePath] = filePath;
+    this[_codec] = options.codec;
+    this[_format] = options.format;
   }
 
   /**
@@ -62,7 +63,7 @@ class MediaReader extends Destroyable {
    * @abstract
    */
   readDimension() {
-    return Utilities.rejectUnimplemented('MediaReader', 'readDimension')
+    return Utilities.rejectUnimplemented('MediaReader', 'readDimension');
   }
 
   /**
@@ -80,7 +81,7 @@ class MediaReader extends Destroyable {
    * @abstract
    */
   readFrames(dimension) {
-    return Utilities.rejectUnimplemented('MediaReader', 'readFrames')
+    return Utilities.rejectUnimplemented('MediaReader', 'readFrames');
   }
 
   /**
@@ -93,7 +94,7 @@ class MediaReader extends Destroyable {
    * @public
    */
   readTitle() {
-    return Promise.resolve(path.basename(this[_filePath]))
+    return Promise.resolve(path.basename(this[_filePath]));
   }
 
   /**
@@ -105,7 +106,7 @@ class MediaReader extends Destroyable {
    * @public
    */
   get codec() {
-    return this[_codec]
+    return this[_codec];
   }
 
   /**
@@ -115,7 +116,7 @@ class MediaReader extends Destroyable {
    * @public
    */
   get filePath() {
-    return this[_filePath]
+    return this[_filePath];
   }
 
   /**
@@ -127,12 +128,12 @@ class MediaReader extends Destroyable {
    * @public
    */
   get format() {
-    return this[_format]
+    return this[_format];
   }
 
 }
 
-module.exports = MediaReader
+module.exports = MediaReader;
 
 /**
  * The options for the {@link MediaReader} constructor.

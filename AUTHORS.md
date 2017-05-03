@@ -1,3 +1,3 @@
 # Authors ordered by first contribution
 
-* Alasdair Mercer
+* Alasdair Mercer <mercer.alasdair@gmail.com>

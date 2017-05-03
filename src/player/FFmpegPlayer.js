@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +15,10 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const FFmpegMediaReader = require('../media/FFmpegMediaReader')
-const Player = require('./Player')
+const FFmpegMediaReader = require('../media/FFmpegMediaReader');
+const Player = require('./Player');
 
 /**
  * A {@link Player} implementation that uses the FFmpeg tool to read the media file information.
@@ -31,9 +32,9 @@ class FFmpegPlayer extends Player {
    * @override
    */
   getMediaReader(filePath, options) {
-    return new FFmpegMediaReader(filePath, options)
+    return new FFmpegMediaReader(filePath, options);
   }
 
 }
 
-module.exports = FFmpegPlayer
+module.exports = FFmpegPlayer;

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +15,11 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const BlessedDisplay = require('./display/BlessedDisplay')
-const Controller = require('./Controller')
-const FFmpegPlayer = require('./player/FFmpegPlayer')
+const BlessedDisplay = require('./display/BlessedDisplay');
+const Controller = require('./Controller');
+const FFmpegPlayer = require('./player/FFmpegPlayer');
 
 /**
  * Returns a {@link Controller} instance to play media files.
@@ -28,8 +29,8 @@ const FFmpegPlayer = require('./player/FFmpegPlayer')
  * @public
  */
 module.exports = (options) => {
-  const display = new BlessedDisplay(options)
-  const player = new FFmpegPlayer()
+  const display = new BlessedDisplay(options);
+  const player = new FFmpegPlayer();
 
-  return new Controller(display, player)
-}
+  return new Controller(display, player);
+};

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +15,17 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const Command = require('commander').Command
-const EOL = require('os').EOL
+const Command = require('commander').Command;
+const EOL = require('os').EOL;
 
-const BlessedDisplay = require('./display/BlessedDisplay')
-const Controller = require('./Controller')
-const FFmpegPlayer = require('./player/FFmpegPlayer')
-const pkg = require('../package.json')
+const BlessedDisplay = require('./display/BlessedDisplay');
+const Controller = require('./Controller');
+const FFmpegPlayer = require('./player/FFmpegPlayer');
+const pkg = require('../package.json');
 
-const _command = Symbol('command')
+const _command = Symbol('command');
 
 /**
  * Manages interaction with this module from the command-line interface.
@@ -41,7 +42,7 @@ class CommandLineInterface {
    * @static
    */
   static get NAME() {
-    return pkg.name
+    return pkg.name;
   }
 
   /**
@@ -52,7 +53,7 @@ class CommandLineInterface {
    * @static
    */
   static get VERSION() {
-    return pkg.version
+    return pkg.version;
   }
 
   /**
@@ -66,7 +67,7 @@ class CommandLineInterface {
       .version(CommandLineInterface.VERSION)
       .option('-c, --codec <name>', 'video codec')
       .option('-f, --format <name>', 'media format')
-      .option('-r, --refresh <rate>', 'refresh rate in milliseconds', parseInt)
+      .option('-r, --refresh <rate>', 'refresh rate in milliseconds', parseInt);
   }
 
   /**
@@ -81,40 +82,40 @@ class CommandLineInterface {
    */
   parse(args) {
     if (args == null) {
-      args = []
+      args = [];
     }
 
-    args = Array.isArray(args) ? args : [ args ]
+    args = Array.isArray(args) ? args : [ args ];
 
-    const command = this[_command].parse(args)
-    const filePath = command.args[0]
-    const displayOptions = { refreshRate: command.refresh }
+    const command = this[_command].parse(args);
+    const filePath = command.args[0];
+    const displayOptions = { refreshRate: command.refresh };
     const playOptions = {
       codec: command.codec,
       format: command.format
-    }
+    };
 
-    const display = new BlessedDisplay(displayOptions)
-    const player = new FFmpegPlayer()
-    const controller = new Controller(display, player)
+    const display = new BlessedDisplay(displayOptions);
+    const player = new FFmpegPlayer();
+    const controller = new Controller(display, player);
 
-    controller.on('stop', () => controller.destroy())
+    controller.on('stop', () => controller.destroy());
     controller.play(filePath, playOptions)
       .catch((error) => {
-        controller.destroy()
+        controller.destroy();
 
         if (error.stack) {
-          process.stderr.write(`${error.stack}${EOL}`)
+          process.stderr.write(`${error.stack}${EOL}`);
         } else {
-          process.stdout.write(`${error}${EOL}`)
+          process.stdout.write(`${error}${EOL}`);
         }
 
-        process.exit(1)
-      })
+        process.exit(1);
+      });
 
-    return controller
+    return controller;
   }
 
 }
 
-module.exports = CommandLineInterface
+module.exports = CommandLineInterface;

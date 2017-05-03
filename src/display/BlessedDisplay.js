@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +15,20 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const blessed = require('blessed')
+const blessed = require('blessed');
 
-const Dimension = require('../Dimension')
-const Display = require('./Display')
+const Dimension = require('../Dimension');
+const Display = require('./Display');
 
-const _destroyNode = Symbol('destroyNode')
-const _help = Symbol('help')
-const _keyBindings = Symbol('keyBindings')
-const _screen = Symbol('screen')
-const _statusBar = Symbol('statusBar')
-const _titleBar = Symbol('titleBar')
-const _viewPort = Symbol('viewPort')
+const _destroyNode = Symbol('destroyNode');
+const _help = Symbol('help');
+const _keyBindings = Symbol('keyBindings');
+const _screen = Symbol('screen');
+const _statusBar = Symbol('statusBar');
+const _titleBar = Symbol('titleBar');
+const _viewPort = Symbol('viewPort');
 
 /**
  * A {@link Display} implementation that uses the blessed library to paint the terminal.
@@ -44,26 +45,26 @@ class BlessedDisplay extends Display {
    * @public
    */
   constructor(options) {
-    super(options)
+    super(options);
 
-    this[_help] = null
-    this[_screen] = null
-    this[_statusBar] = null
-    this[_titleBar] = null
-    this[_viewPort] = null
+    this[_help] = null;
+    this[_screen] = null;
+    this[_statusBar] = null;
+    this[_titleBar] = null;
+    this[_viewPort] = null;
   }
 
   /**
    * @override
    */
   destroy() {
-    this[_destroyNode](_help)
-    this[_destroyNode](_viewPort)
-    this[_destroyNode](_titleBar)
-    this[_destroyNode](_statusBar)
-    this[_destroyNode](_screen)
+    this[_destroyNode](_help);
+    this[_destroyNode](_viewPort);
+    this[_destroyNode](_titleBar);
+    this[_destroyNode](_statusBar);
+    this[_destroyNode](_screen);
 
-    return super.destroy()
+    return super.destroy();
   }
 
   /**
@@ -71,44 +72,44 @@ class BlessedDisplay extends Display {
    */
   getDimension() {
     if (!this.isRendered()) {
-      return null
+      return null;
     }
 
-    return new Dimension(this[_viewPort].width - 2, this[_viewPort].height - 2)
+    return new Dimension(this[_viewPort].width - 2, this[_viewPort].height - 2);
   }
 
   /**
    * @override
    */
   hideHelp() {
-    this[_destroyNode](_help)
+    this[_destroyNode](_help);
 
-    return super.hideHelp()
+    return super.hideHelp();
   }
 
   /**
    * @override
    */
   isRendered() {
-    return this[_screen] != null && this[_statusBar] != null && this[_titleBar] != null && this[_viewPort] != null
+    return this[_screen] != null && this[_statusBar] != null && this[_titleBar] != null && this[_viewPort] != null;
   }
 
   /**
    * @override
    */
   isShowingHelp() {
-    return this[_help] != null
+    return this[_help] != null;
   }
 
   /**
    * @override
    */
   paint(frame, currentFrame) {
-    const paint = frame.getPaint(this.getDimension(), currentFrame)
+    const paint = frame.getPaint(this.getDimension(), currentFrame);
 
-    this[_viewPort].setContent(paint.ascii)
+    this[_viewPort].setContent(paint.ascii);
 
-    this.update()
+    this.update();
   }
 
   /**
@@ -117,19 +118,19 @@ class BlessedDisplay extends Display {
   render() {
     // Simply refresh the screen if it's already been rendered initially
     if (this[_screen]) {
-      this.update()
+      this.update();
 
-      return super.render()
+      return super.render();
     }
 
     // Create the main screen to contain the media view port and status + title bars
-    this[_screen] = blessed.screen({ fastCSR: true })
+    this[_screen] = blessed.screen({ fastCSR: true });
 
     for (const entry of BlessedDisplay[_keyBindings].entries()) {
-      const keys = entry[0].split(/,\s*/)
-      const callback = entry[1]
+      const keys = entry[0].split(/,\s*/);
+      const callback = entry[1];
 
-      this[_screen].key(keys, () => callback(this.controller))
+      this[_screen].key(keys, () => callback(this.controller));
     }
 
     // Create the view port through which the media will be displayed
@@ -141,7 +142,7 @@ class BlessedDisplay extends Display {
       style: { bg: 'black' },
       top: 0,
       width: '100%'
-    })
+    });
 
     // Create a bar to display the status text
     this[_statusBar] = blessed.box({
@@ -155,7 +156,7 @@ class BlessedDisplay extends Display {
       parent: this[_viewPort],
       type: 'overlay',
       width: 'shrink'
-    })
+    });
 
     // Create a bar to display the title
     this[_titleBar] = blessed.box({
@@ -169,11 +170,11 @@ class BlessedDisplay extends Display {
       top: -1,
       type: 'overlay',
       width: 'shrink'
-    })
+    });
 
-    this.update()
+    this.update();
 
-    return super.render()
+    return super.render();
   }
 
   /**
@@ -188,7 +189,7 @@ class BlessedDisplay extends Display {
       tags: true,
       top: 'center',
       width: 'shrink'
-    })
+    });
     // TODO: Populate keyboard shortcuts dynamically
     this[_help].setContent(`{bold}Help Instructions{/bold}
 
@@ -197,18 +198,18 @@ Pause          - Space
 Resume         - Space
 Stop           - Enter (same as Quit)
 Show/Hide Help - ?
-Quit           - Esc, Q, ${process.platform === 'darwin' ? 'Command' : 'Control'}+C`)
+Quit           - Esc, Q, ${process.platform === 'darwin' ? 'Command' : 'Control'}+C`);
 
-    return super.showHelp()
+    return super.showHelp();
   }
 
   /**
    * @override
    */
   update() {
-    this[_statusBar].setText(this.status)
-    this[_titleBar].setText(this.title)
-    this[_screen].render()
+    this[_statusBar].setText(this.status);
+    this[_titleBar].setText(this.title);
+    this[_screen].render();
   }
 
   /**
@@ -221,9 +222,9 @@ Quit           - Esc, Q, ${process.platform === 'darwin' ? 'Command' : 'Control'
    */
   [_destroyNode](field) {
     if (this[field]) {
-      this[field].destroy()
+      this[field].destroy();
 
-      this[field] = null
+      this[field] = null;
     }
   }
 
@@ -236,19 +237,19 @@ Quit           - Esc, Q, ${process.platform === 'darwin' ? 'Command' : 'Control'
  * @static
  * @type {Map.<string, BlessedDisplay~KeyBindingCallback>}
  */
-BlessedDisplay[_keyBindings] = new Map()
-BlessedDisplay[_keyBindings].set('?', (controller) => controller.help())
-BlessedDisplay[_keyBindings].set('enter', (controller) => controller.stop())
-BlessedDisplay[_keyBindings].set('escape, q, C-c', (controller) => controller.destroy())
+BlessedDisplay[_keyBindings] = new Map();
+BlessedDisplay[_keyBindings].set('?', (controller) => controller.help());
+BlessedDisplay[_keyBindings].set('enter', (controller) => controller.stop());
+BlessedDisplay[_keyBindings].set('escape, q, C-c', (controller) => controller.destroy());
 BlessedDisplay[_keyBindings].set('space', (controller) => {
   if (controller.player.playing) {
-    controller.pause()
+    controller.pause();
   } else {
-    controller.resume()
+    controller.resume();
   }
-})
+});
 
-module.exports = BlessedDisplay
+module.exports = BlessedDisplay;
 
 /**
  * Handles the triggering of a key binding.

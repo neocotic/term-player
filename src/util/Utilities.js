@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +15,9 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const _createUnimplementedError = Symbol('createUnimplementedError')
+const _createUnimplementedError = Symbol('createUnimplementedError');
 
 /**
  * Contains utility methods that are useful throughout the application.
@@ -37,7 +38,7 @@ class Utilities {
    * @static
    */
   static rejectUnimplemented(className, methodName) {
-    return Promise.reject(Utilities[_createUnimplementedError](className, methodName))
+    return Promise.reject(Utilities[_createUnimplementedError](className, methodName));
   }
 
   /**
@@ -51,7 +52,7 @@ class Utilities {
    * @static
    */
   static throwUnimplemented(className, methodName) {
-    throw Utilities[_createUnimplementedError](className, methodName)
+    throw Utilities[_createUnimplementedError](className, methodName);
   }
 
   /**
@@ -64,9 +65,9 @@ class Utilities {
    * @static
    */
   static [_createUnimplementedError](className, methodName) {
-    return new Error(`"${methodName}" method must be implemented on the ${className} class`)
+    return new Error(`"${methodName}" method must be implemented on the ${className} class`);
   }
 
 }
 
-module.exports = Utilities
+module.exports = Utilities;

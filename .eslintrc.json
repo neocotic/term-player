@@ -1,10 +1,9 @@
 {
-  "extends": "skelp/es6",
+  "extends": "notninja/es6",
   "env": {
     "node": true
   },
   "rules": {
-    "arrow-body-style": "off",
     "max-params": [
       "error",
       4

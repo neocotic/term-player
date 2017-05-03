@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +15,11 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const fs = require('fs')
+const fs = require('fs');
 
-const _checkExistsAndStatMethod = Symbol('checkExistsAndStatMethod')
+const _checkExistsAndStatMethod = Symbol('checkExistsAndStatMethod');
 
 /**
  * A utility class for working with the file system.
@@ -41,12 +42,12 @@ class Files {
     return new Promise((resolve, reject) => {
       fs.stat(filePath, (error, stats) => {
         if (error) {
-          return reject(stats)
+          return reject(stats);
         }
 
-        return resolve(stats)
-      })
-    })
+        return resolve(stats);
+      });
+    });
   }
 
   /**
@@ -60,9 +61,9 @@ class Files {
   static isAccessible(filePath) {
     return new Promise((resolve) => {
       fs.access(filePath, fs.F_OK, (error) => {
-        resolve(error == null)
-      })
-    })
+        resolve(error == null);
+      });
+    });
   }
 
   /**
@@ -74,7 +75,7 @@ class Files {
    * @static
    */
   static isDirectory(filePath) {
-    return Files[_checkExistsAndStatMethod](filePath, 'isDirectory')
+    return Files[_checkExistsAndStatMethod](filePath, 'isDirectory');
   }
 
   /**
@@ -86,7 +87,7 @@ class Files {
    * @static
    */
   static isFile(filePath) {
-    return Files[_checkExistsAndStatMethod](filePath, 'isFile')
+    return Files[_checkExistsAndStatMethod](filePath, 'isFile');
   }
 
   /**
@@ -103,9 +104,9 @@ class Files {
   static [_checkExistsAndStatMethod](filePath, statMethod) {
     return Files.isAccessible(filePath)
       .then((accessible) => accessible ? Files.getStats(filePath) : null)
-      .then((stats) => stats != null && stats[statMethod]())
+      .then((stats) => stats != null && stats[statMethod]());
   }
 
 }
 
-module.exports = Files
+module.exports = Files;

@@ -8,11 +8,11 @@
                                                           888                       .o..P'
                                                          o888o                      `Y8P'
 
-[![Build Status](https://img.shields.io/travis/secureworks/term-player/develop.svg?style=flat-square)](https://travis-ci.org/secureworks/term-player)
-[![Dependency Status](https://img.shields.io/david/secureworks/term-player.svg?style=flat-square)](https://david-dm.org/secureworks/term-player)
-[![Dev Dependency Status](https://img.shields.io/david/dev/secureworks/term-player.svg?style=flat-square)](https://david-dm.org/secureworks/term-player?type=dev)
-[![License](https://img.shields.io/github/license/secureworks/term-player.svg?style=flat-square)](https://github.com/secureworks/term-player/blob/master/LICENSE.txt)
-[![Release](https://img.shields.io/github/release/secureworks/term-player.svg?style=flat-square)](https://github.com/secureworks/term-player)
+[![Build Status](https://img.shields.io/travis/neocotic/term-player/develop.svg?style=flat-square)](https://travis-ci.org/neocotic/term-player)
+[![Dependency Status](https://img.shields.io/david/neocotic/term-player.svg?style=flat-square)](https://david-dm.org/neocotic/term-player)
+[![Dev Dependency Status](https://img.shields.io/david/dev/neocotic/term-player.svg?style=flat-square)](https://david-dm.org/neocotic/term-player?type=dev)
+[![License](https://img.shields.io/npm/l/term-player.svg?style=flat-square)](https://github.com/neocotic/term-player/blob/master/LICENSE.txt)
+[![Release](https://img.shields.io/npm/v/term-player.svg?style=flat-square)](https://www.npmjs.com/package/term-player)
 
 term-player was simply a fun project to create a media player for your terminal written in JavaScript.
 
@@ -29,32 +29,16 @@ It isn't pretty, but it sure is fun!
 
 Before you can install term-player, you need to ensure that you have the following:
 
-* [Git](https://git-scm.com)
 * [Node.js](https://nodejs.org) v4 or newer
 * [npm](https://www.npmjs.com)
 * [FFmpeg](https://www.ffmpeg.org) v2 or newer (not tested on v3)
 
-The executables for all of these dependencies must be available on your system `PATH`. If you want to be able to access
-globally installed npm modules from anywhere (recommended), you should also ensure that the appropriate directory is in
-your `PATH`. You can find this directory easily by running the following command:
-
-``` bash
-$ npm config get prefix
-```
-
 ## Install
 
-First you need to checkout the code from Git:
+Install using npm:
 
 ``` bash
-$ git clone https://github.com/secureworks/term-player.git
-$ cd term-player
-```
-
-Then you need to install the project and its dependencies using npm:
-
-``` bash
-term-player$ npm install -g
+$ npm install --global term-player
 ```
 
 ## Usage
@@ -81,13 +65,13 @@ is 60 milliseconds.
 ## Contributors
 
 If you want to contribute, you're a legend! Information on how you can do so can be found in
-[CONTRIBUTING.md](https://github.com/secureworks/term-player/blob/master/CONTRIBUTING.md). We want your suggestions and
+[CONTRIBUTING.md](https://github.com/neocotic/term-player/blob/master/CONTRIBUTING.md). We want your suggestions and
 pull requests!
 
 A list of term-player contributors can be found in
-[AUTHORS.md](https://github.com/secureworks/term-player/blob/master/AUTHORS.md).
+[AUTHORS.md](https://github.com/neocotic/term-player/blob/master/AUTHORS.md).
 
 ## License
 
-See [LICENSE.txt](https://github.com/secureworks/term-player/raw/master/LICENSE.txt) for more information on our Apache
+See [LICENSE.txt](https://github.com/neocotic/term-player/raw/master/LICENSE.txt) for more information on our Apache
 License, Version 2.0.

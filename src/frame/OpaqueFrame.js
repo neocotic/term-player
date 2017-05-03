@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +15,10 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const Color = require('../Color')
-const Frame = require('./Frame')
+const Color = require('../Color');
+const Frame = require('./Frame');
 
 /**
  * A simple implementation of {@link Frame} that does not support transparency.
@@ -33,18 +34,18 @@ class OpaqueFrame extends Frame {
    * @override
    */
   getPixelColor(pixels, index) {
-    const color = new Color(pixels[index], pixels[index + 1], pixels[index + 2])
+    const color = new Color(pixels[index], pixels[index + 1], pixels[index + 2]);
 
-    return color.toAnsi()
+    return color.toAnsi();
   }
 
   /**
    * @override
    */
   getPixelLength() {
-    return 3
+    return 3;
   }
 
 }
 
-module.exports = OpaqueFrame
+module.exports = OpaqueFrame;

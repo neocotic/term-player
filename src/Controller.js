@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +15,13 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const Destroyable = require('./Destroyable')
-const Files = require('./util/Files')
+const Destroyable = require('./Destroyable');
+const Files = require('./util/Files');
 
-const _display = Symbol('display')
-const _player = Symbol('player')
+const _display = Symbol('display');
+const _player = Symbol('player');
 
 /**
  * Controls interactions to and between a {@link Display} and a {@link Player}.
@@ -38,23 +39,23 @@ class Controller extends Destroyable {
    * @public
    */
   constructor(display, player) {
-    super()
+    super();
 
-    display.controller = this
-    player.controller = this
+    display.controller = this;
+    player.controller = this;
 
-    this[_display] = display
-    this[_player] = player
+    this[_display] = display;
+    this[_player] = player;
   }
 
   /**
    * @override
    */
   destroy() {
-    this.display.destroy()
-    this.player.destroy()
+    this.display.destroy();
+    this.player.destroy();
 
-    return super.destroy()
+    return super.destroy();
   }
 
   /**
@@ -64,15 +65,15 @@ class Controller extends Destroyable {
    * @public
    */
   help() {
-    const wasShowing = this.display.isShowingHelp()
+    const wasShowing = this.display.isShowingHelp();
 
     if (wasShowing) {
-      this.display.hideHelp()
+      this.display.hideHelp();
     } else {
-      this.display.showHelp()
+      this.display.showHelp();
     }
 
-    return !wasShowing
+    return !wasShowing;
   }
 
   /**
@@ -87,15 +88,15 @@ class Controller extends Destroyable {
    */
   pause() {
     if (!this.player.playing) {
-      return false
+      return false;
     }
 
-    this.player.paused = true
-    this.display.frozen = true
+    this.player.paused = true;
+    this.display.frozen = true;
 
-    this.emit('pause')
+    this.emit('pause');
 
-    return true
+    return true;
   }
 
   /**
@@ -113,35 +114,35 @@ class Controller extends Destroyable {
    */
   play(filePath, options) {
     if (options == null) {
-      options = {}
+      options = {};
     }
 
     if (!this.player.stopped) {
-      return Promise.reject(new Error('Player must be stopped before playing another file'))
+      return Promise.reject(new Error('Player must be stopped before playing another file'));
     }
 
     return Files.isFile(filePath)
       .then((isFile) => {
         if (!isFile) {
-          throw new Error(`Cannot play invalid file path: ${filePath}`)
+          throw new Error(`Cannot play invalid file path: ${filePath}`);
         }
 
-        return this.player.getTitle(filePath, options)
+        return this.player.getTitle(filePath, options);
       })
       .then((title) => {
-        this.display.title = title
+        this.display.title = title;
 
-        this.emit('play', filePath, title, options)
+        this.emit('play', filePath, title, options);
 
-        return this.player.play(filePath, options)
+        return this.player.play(filePath, options);
       })
       .then((frameSet) => {
         this.display
           .render()
-          .load(frameSet)
+          .load(frameSet);
 
-        return frameSet
-      })
+        return frameSet;
+      });
   }
 
   /**
@@ -154,15 +155,15 @@ class Controller extends Destroyable {
    */
   resume() {
     if (!this.player.paused) {
-      return false
+      return false;
     }
 
-    this.player.playing = true
-    this.display.frozen = false
+    this.player.playing = true;
+    this.display.frozen = false;
 
-    this.emit('resume')
+    this.emit('resume');
 
-    return true
+    return true;
   }
 
   /**
@@ -177,18 +178,18 @@ class Controller extends Destroyable {
    * @public
    */
   stop() {
-    const wasStopped = this.player.stopped
+    const wasStopped = this.player.stopped;
 
-    this.player.stopped = true
-    this.display.unload()
+    this.player.stopped = true;
+    this.display.unload();
 
     if (!wasStopped) {
-      this.emit('stop')
+      this.emit('stop');
 
-      return true
+      return true;
     }
 
-    return false
+    return false;
   }
 
   /**
@@ -198,7 +199,7 @@ class Controller extends Destroyable {
    * @public
    */
   get display() {
-    return this[_display]
+    return this[_display];
   }
 
   /**
@@ -208,9 +209,9 @@ class Controller extends Destroyable {
    * @public
    */
   get player() {
-    return this[_player]
+    return this[_player];
   }
 
 }
 
-module.exports = Controller
+module.exports = Controller;

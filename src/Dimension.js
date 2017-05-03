@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,10 +15,10 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const _height = Symbol('height')
-const _width = Symbol('width')
+const _height = Symbol('height');
+const _width = Symbol('width');
 
 /**
  * Contains width and height dimensions.
@@ -36,15 +37,15 @@ class Dimension {
    * @public
    */
   constructor(width, height) {
-    this[_width] = width ? Math.abs(width) : 0
-    this[_height] = height ? Math.abs(height) : 0
+    this[_width] = width ? Math.abs(width) : 0;
+    this[_height] = height ? Math.abs(height) : 0;
   }
 
   /**
    * @override
    */
   toString() {
-    return `${this.width}x${this.height}`
+    return `${this.width}x${this.height}`;
   }
 
   /**
@@ -54,7 +55,7 @@ class Dimension {
    * @public
    */
   get area() {
-    return this.width * this.height
+    return this.width * this.height;
   }
 
   /**
@@ -64,7 +65,7 @@ class Dimension {
    * @public
    */
   get height() {
-    return this[_height]
+    return this[_height];
   }
 
   /**
@@ -74,9 +75,9 @@ class Dimension {
    * @public
    */
   get width() {
-    return this[_width]
+    return this[_width];
   }
 
 }
 
-module.exports = Dimension
+module.exports = Dimension;

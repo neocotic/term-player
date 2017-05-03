@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +15,9 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const EventEmitter = require('events').EventEmitter
+const EventEmitter = require('events').EventEmitter;
 
 /**
  * An <code>EventEmitter</code> that allows itself to be easily destroyed.
@@ -36,13 +37,13 @@ class Destroyable extends EventEmitter {
    * @public
    */
   destroy() {
-    this.emit('destroy')
+    this.emit('destroy');
 
-    this.removeAllListeners()
+    this.removeAllListeners();
 
-    return this
+    return this;
   }
 
 }
 
-module.exports = Destroyable
+module.exports = Destroyable;

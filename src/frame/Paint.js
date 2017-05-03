@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +15,14 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const Color = require('../Color')
+const Color = require('../Color');
 
-const _ascii = Symbol('ascii')
-const _colors = Symbol('colors')
-const _frame = Symbol('frame')
-const _getProminentColor = Symbol('getProminentColor')
+const _ascii = Symbol('ascii');
+const _colors = Symbol('colors');
+const _frame = Symbol('frame');
+const _getProminentColor = Symbol('getProminentColor');
 
 /**
  * Contains information which can be used to paint a view port.
@@ -38,7 +39,7 @@ class Paint {
    * @static
    */
   static get ASCII_CHARACTER() {
-    return '#'
+    return '#';
   }
 
   /**
@@ -49,7 +50,7 @@ class Paint {
    * @static
    */
   static get TRANSPARENT_ANSI() {
-    return -1
+    return -1;
   }
 
   /**
@@ -70,40 +71,40 @@ class Paint {
    */
   static [_getProminentColor](index, colors, previousColors) {
     if (colors == null) {
-      return null
+      return null;
     }
 
     const sorted = Object.keys(colors)
       .map((color) => {
-        let ansiColor = parseInt(color, 10)
-        let count = colors[color]
+        let ansiColor = parseInt(color, 10);
+        let count = colors[color];
 
         // Take color from previously painted colors if this paint doesn't have the color information
         if (ansiColor === Paint.TRANSPARENT_ANSI && previousColors) {
-          ansiColor = previousColors[index]
+          ansiColor = previousColors[index];
         }
 
         // Count color but use less weight for grayscale colors in attempt to encourage more colors
         if (Color.isAnsiGrayscale(ansiColor)) {
-          count /= 2
+          count /= 2;
         }
 
         return {
           color: ansiColor,
           count
-        }
+        };
       })
       .sort((a, b) => {
         if (a.count < b.count) {
-          return 1
+          return 1;
         } else if (a.count > b.count) {
-          return -1
+          return -1;
         }
-        return 0
-      })
-    const prominentColor = sorted[0]
+        return 0;
+      });
+    const prominentColor = sorted[0];
 
-    return prominentColor ? prominentColor.color : null
+    return prominentColor ? prominentColor.color : null;
   }
 
   /**
@@ -119,34 +120,34 @@ class Paint {
    * @public
    */
   constructor(frame, countedColors, lastPaint) {
-    this[_frame] = frame
-    this[_ascii] = ''
-    this[_colors] = []
+    this[_frame] = frame;
+    this[_ascii] = '';
+    this[_colors] = [];
 
-    let previousColor = null
-    const previousColors = lastPaint && lastPaint[_colors]
+    let previousColor = null;
+    const previousColors = lastPaint && lastPaint[_colors];
 
     for (let i = 0; i < countedColors.length; i++) {
-      const colors = countedColors[i]
-      const ansiColor = Paint[_getProminentColor](i, colors, previousColors)
+      const colors = countedColors[i];
+      const ansiColor = Paint[_getProminentColor](i, colors, previousColors);
 
-      this[_colors][i] = ansiColor
+      this[_colors][i] = ansiColor;
 
       if (ansiColor !== previousColor) {
         if (this[_ascii]) {
-          this[_ascii] += Color.closeAnsi()
+          this[_ascii] += Color.closeAnsi();
         }
 
-        this[_ascii] += Color.openAnsi(ansiColor)
+        this[_ascii] += Color.openAnsi(ansiColor);
 
-        previousColor = ansiColor
+        previousColor = ansiColor;
       }
 
-      this[_ascii] += Paint.ASCII_CHARACTER
+      this[_ascii] += Paint.ASCII_CHARACTER;
     }
 
     if (this[_ascii]) {
-      this[_ascii] += Color.closeAnsi()
+      this[_ascii] += Color.closeAnsi();
     }
   }
 
@@ -154,7 +155,7 @@ class Paint {
    * @override
    */
   toString() {
-    return this.ascii
+    return this.ascii;
   }
 
   /**
@@ -164,7 +165,7 @@ class Paint {
    * @public
    */
   get ascii() {
-    return this[_ascii]
+    return this[_ascii];
   }
 
   /**
@@ -174,7 +175,7 @@ class Paint {
    * @public
    */
   get colors() {
-    return this[_colors].slice()
+    return this[_colors].slice();
   }
 
   /**
@@ -184,9 +185,9 @@ class Paint {
    * @public
    */
   get frame() {
-    return this[_frame]
+    return this[_frame];
   }
 
 }
 
-module.exports = Paint
+module.exports = Paint;

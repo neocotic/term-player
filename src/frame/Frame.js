@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +15,17 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const Color = require('../Color')
-const Dimension = require('../Dimension')
-const Paint = require('./Paint')
+const Color = require('../Color');
+const Dimension = require('../Dimension');
+const Paint = require('./Paint');
 
-const _countColors = Symbol('countColors')
-const _dimension = Symbol('dimension')
-const _index = Symbol('index')
-const _paintCache = Symbol('paintCache')
-const _pixels = Symbol('pixels')
+const _countColors = Symbol('countColors');
+const _dimension = Symbol('dimension');
+const _index = Symbol('index');
+const _paintCache = Symbol('paintCache');
+const _pixels = Symbol('pixels');
 
 /**
  * Contains the information for a single frame within media which can be used to paint an image onto a {@link Display}
@@ -44,10 +45,10 @@ class Frame {
    * @public
    */
   constructor(index, pixels, width, height) {
-    this[_index] = index
-    this[_pixels] = pixels
-    this[_dimension] = new Dimension(width, height)
-    this[_paintCache] = new Map()
+    this[_index] = index;
+    this[_pixels] = pixels;
+    this[_dimension] = new Dimension(width, height);
+    this[_paintCache] = new Map();
   }
 
   /**
@@ -66,18 +67,18 @@ class Frame {
    * @public
    */
   getPaint(dimension, previousFrame) {
-    const cacheKey = `${dimension}`
-    let paint = this[_paintCache].get(cacheKey)
+    const cacheKey = `${dimension}`;
+    let paint = this[_paintCache].get(cacheKey);
 
     if (paint == null) {
-      const countedColors = this[_countColors](dimension)
-      const lastPaint = previousFrame && previousFrame.getPaint(dimension)
-      paint = new Paint(this, countedColors, lastPaint)
+      const countedColors = this[_countColors](dimension);
+      const lastPaint = previousFrame && previousFrame.getPaint(dimension);
+      paint = new Paint(this, countedColors, lastPaint);
 
-      this[_paintCache].set(cacheKey, paint)
+      this[_paintCache].set(cacheKey, paint);
     }
 
-    return paint
+    return paint;
   }
 
   /**
@@ -89,9 +90,9 @@ class Frame {
    * @protected
    */
   getPixelColor(pixels, index) {
-    const color = new Color(pixels[index], pixels[index + 1], pixels[index + 2], pixels[index + 3])
+    const color = new Color(pixels[index], pixels[index + 1], pixels[index + 2], pixels[index + 3]);
 
-    return color.hasTransparency() ? Paint.TRANSPARENT_ANSI : color.toAnsi()
+    return color.hasTransparency() ? Paint.TRANSPARENT_ANSI : color.toAnsi();
   }
 
   /**
@@ -101,7 +102,7 @@ class Frame {
    * @protected
    */
   getPixelLength() {
-    return 4
+    return 4;
   }
 
   /**
@@ -116,30 +117,30 @@ class Frame {
    * @private
    */
   [_countColors](dimension) {
-    const blockHeight = Math.max(this.dimension.height / dimension.height, 1)
-    const blockWidth = Math.max(this.dimension.width / dimension.width, 1)
-    const counts = []
-    const pixelLength = this.getPixelLength()
+    const blockHeight = Math.max(this.dimension.height / dimension.height, 1);
+    const blockWidth = Math.max(this.dimension.width / dimension.width, 1);
+    const counts = [];
+    const pixelLength = this.getPixelLength();
 
     for (let i = 0; i < this[_pixels].length; i += pixelLength) {
-      const pixelIndex = i / pixelLength
+      const pixelIndex = i / pixelLength;
       const index = (Math.floor(pixelIndex / blockWidth) % dimension.width) +
-        (Math.floor(pixelIndex / this.dimension.width / blockHeight) * dimension.width)
+        (Math.floor(pixelIndex / this.dimension.width / blockHeight) * dimension.width);
 
       if (!counts[index]) {
-        counts[index] = {}
+        counts[index] = {};
       }
 
-      const color = this.getPixelColor(this[_pixels], i)
+      const color = this.getPixelColor(this[_pixels], i);
 
       if (!(color in counts[index])) {
-        counts[index][color] = 0
+        counts[index][color] = 0;
       }
 
-      counts[index][color]++
+      counts[index][color]++;
     }
 
-    return counts
+    return counts;
   }
 
   /**
@@ -149,7 +150,7 @@ class Frame {
    * @public
    */
   get dimension() {
-    return this[_dimension]
+    return this[_dimension];
   }
 
   /**
@@ -159,7 +160,7 @@ class Frame {
    * @public
    */
   get index() {
-    return this[_index]
+    return this[_index];
   }
 
   /**
@@ -169,9 +170,9 @@ class Frame {
    * @public
    */
   get pixels() {
-    return new Uint8Array(this[_pixels])
+    return new Uint8Array(this[_pixels]);
   }
 
 }
 
-module.exports = Frame
+module.exports = Frame;

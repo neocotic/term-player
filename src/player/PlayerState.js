@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +15,11 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const _paused = Symbol('paused')
-const _playing = Symbol('playing')
-const _stopped = Symbol('stopped')
+const _paused = Symbol('paused');
+const _playing = Symbol('playing');
+const _stopped = Symbol('stopped');
 
 /**
  * Contains the various valid states for a {@link Player}.
@@ -36,7 +37,7 @@ class PlayerState {
    * @static
    */
   static get PAUSED() {
-    return _paused
+    return _paused;
   }
 
   /**
@@ -47,7 +48,7 @@ class PlayerState {
    * @static
    */
   static get PLAYING() {
-    return _playing
+    return _playing;
   }
 
   /**
@@ -59,9 +60,9 @@ class PlayerState {
    * @static
    */
   static get STOPPED() {
-    return _stopped
+    return _stopped;
   }
 
 }
 
-module.exports = PlayerState
+module.exports = PlayerState;

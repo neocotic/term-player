@@ -1,10 +1,10 @@
 # Contributing
 
-If you have any questions about [term-player](https://github.com/secureworks/term-player) please feel free to
-[raise an issue](https://github.com/secureworks/term-player/issues/new).
+If you have any questions about [term-player](https://github.com/neocotic/term-player) please feel free to
+[raise an issue](https://github.com/neocotic/term-player/issues/new).
 
-Please [search existing issues](https://github.com/secureworks/term-player/issues) for the same feature and/or issue
-before raising a new issue. Commenting on an existing issue is usually preferred over raising duplicate issues.
+Please [search existing issues](https://github.com/neocotic/term-player/issues) for the same feature and/or issue before
+raising a new issue. Commenting on an existing issue is usually preferred over raising duplicate issues.
 
 Please ensure that all files conform to the coding standards, using the same coding style as the rest of the code base.
 This can easily be checked via command-line:
@@ -21,5 +21,5 @@ You must have at least [Node.js](https://nodejs.org) version 4 or newer installe
 All pull requests should be made to the `develop` branch.
 
 Don't forget to add your details to the list of
-[AUTHORS.md](https://github.com/secureworks/term-player/blob/master/AUTHORS.md) if you want your contribution to be
+[AUTHORS.md](https://github.com/neocotic/term-player/blob/master/AUTHORS.md) if you want your contribution to be
 recognized by others.

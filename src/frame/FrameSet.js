@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,13 +15,13 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const EventEmitter = require('events').EventEmitter
+const EventEmitter = require('events').EventEmitter;
 
-const _finalized = Symbol('finalized')
-const _frames = Symbol('frames')
-const _totalLength = Symbol('totalLength')
+const _finalized = Symbol('finalized');
+const _frames = Symbol('frames');
+const _totalLength = Symbol('totalLength');
 
 /**
  * Contains a set of frames.
@@ -37,11 +38,11 @@ class FrameSet extends EventEmitter {
    * @public
    */
   constructor(frames) {
-    super()
+    super();
 
-    this[_finalized] = false
-    this[_frames] = frames ? frames.slice() : []
-    this[_totalLength] = 0
+    this[_finalized] = false;
+    this[_frames] = frames ? frames.slice() : [];
+    this[_totalLength] = 0;
   }
 
   /**
@@ -57,15 +58,15 @@ class FrameSet extends EventEmitter {
    */
   add(frame) {
     if (this.finalized) {
-      throw new Error('Cannot add to frame set which has been finalized')
+      throw new Error('Cannot add to frame set which has been finalized');
     }
 
-    this[_frames].push(frame)
-    this[_totalLength]++
+    this[_frames].push(frame);
+    this[_totalLength]++;
 
-    this.emit('add', frame)
+    this.emit('add', frame);
 
-    return this
+    return this;
   }
 
   /**
@@ -78,14 +79,14 @@ class FrameSet extends EventEmitter {
    */
   finalize() {
     if (this[_finalized]) {
-      return this
+      return this;
     }
 
-    this[_finalized] = true
+    this[_finalized] = true;
 
-    this.emit('finalize')
+    this.emit('finalize');
 
-    return this
+    return this;
   }
 
   /**
@@ -97,7 +98,7 @@ class FrameSet extends EventEmitter {
    * @public
    */
   hasNext() {
-    return this[_frames].length > 0
+    return this[_frames].length > 0;
   }
 
   /**
@@ -117,14 +118,14 @@ class FrameSet extends EventEmitter {
    */
   next() {
     if (!this.hasNext()) {
-      throw new Error('No more frames in set')
+      throw new Error('No more frames in set');
     }
 
-    const frame = this[_frames].shift()
+    const frame = this[_frames].shift();
 
-    this.emit('next', frame)
+    this.emit('next', frame);
 
-    return frame
+    return frame;
   }
 
   /**
@@ -140,14 +141,14 @@ class FrameSet extends EventEmitter {
    * @public
    */
   subSet(begin, end) {
-    const frameSet = new FrameSet(this[_frames].slice(begin, end))
-    frameSet[_totalLength] = frameSet.length
+    const frameSet = new FrameSet(this[_frames].slice(begin, end));
+    frameSet[_totalLength] = frameSet.length;
 
     if (this[_finalized]) {
-      frameSet[_finalized] = true
+      frameSet[_finalized] = true;
     }
 
-    return frameSet
+    return frameSet;
   }
 
   /**
@@ -160,7 +161,7 @@ class FrameSet extends EventEmitter {
    * @public
    */
   get finalized() {
-    return this[_finalized]
+    return this[_finalized];
   }
 
   /**
@@ -174,7 +175,7 @@ class FrameSet extends EventEmitter {
    * @public
    */
   get length() {
-    return this[_frames].length
+    return this[_frames].length;
   }
 
   /**
@@ -184,9 +185,9 @@ class FrameSet extends EventEmitter {
    * @public
    */
   get totalLength() {
-    return this[_totalLength]
+    return this[_totalLength];
   }
 
 }
 
-module.exports = FrameSet
+module.exports = FrameSet;

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +15,15 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const convert = require('color-convert')
+const convert = require('color-convert');
 
-const _alpha = Symbol('alpha')
-const _ansiCache = Symbol('ansiCache')
-const _blue = Symbol('blue')
-const _green = Symbol('green')
-const _red = Symbol('red')
+const _alpha = Symbol('alpha');
+const _ansiCache = Symbol('ansiCache');
+const _blue = Symbol('blue');
+const _green = Symbol('green');
+const _red = Symbol('red');
 
 /**
  * Contains the RGBA information for a specific color.
@@ -42,7 +43,7 @@ class Color {
    * @static
    */
   static closeAnsi() {
-    return '\u001b[39m'
+    return '\u001b[39m';
   }
 
   /**
@@ -55,12 +56,12 @@ class Color {
    */
   static deserialize(color) {
     if (color == null) {
-      return null
+      return null;
     }
 
-    const rgb = color.split(',')
+    const rgb = color.split(',');
 
-    return new Color(rgb[0], rgb[1], rgb[2], rgb[3])
+    return new Color(rgb[0], rgb[1], rgb[2], rgb[3]);
   }
 
   /**
@@ -72,7 +73,7 @@ class Color {
    * @static
    */
   static isAnsiGrayscale(code) {
-    return code >= 232 || code === 59 || code === 16
+    return code >= 232 || code === 59 || code === 16;
   }
 
   /**
@@ -84,7 +85,7 @@ class Color {
    * @static
    */
   static openAnsi(code) {
-    return `\u001b[38;5;${code}m`
+    return `\u001b[38;5;${code}m`;
   }
 
   /**
@@ -97,10 +98,10 @@ class Color {
    */
   static serialize(color) {
     if (color == null) {
-      return null
+      return null;
     }
 
-    return `${color.red},${color.green},${color.blue},${color.alpha}`
+    return `${color.red},${color.green},${color.blue},${color.alpha}`;
   }
 
   /**
@@ -113,10 +114,10 @@ class Color {
    * @public
    */
   constructor(red, green, blue, alpha) {
-    this[_red] = red
-    this[_green] = green
-    this[_blue] = blue
-    this[_alpha] = alpha != null ? alpha : 255
+    this[_red] = red;
+    this[_green] = green;
+    this[_blue] = blue;
+    this[_alpha] = alpha != null ? alpha : 255;
   }
 
   /**
@@ -126,7 +127,7 @@ class Color {
    * @public
    */
   hasTransparency() {
-    return this.alpha < 255
+    return this.alpha < 255;
   }
 
   /**
@@ -136,23 +137,23 @@ class Color {
    * @public
    */
   toAnsi() {
-    const serialized = Color.serialize(this)
-    let ansiColor = Color[_ansiCache].get(serialized)
+    const serialized = Color.serialize(this);
+    let ansiColor = Color[_ansiCache].get(serialized);
 
     if (ansiColor == null) {
-      ansiColor = convert.rgb.ansi256(this.red, this.green, this.blue)
+      ansiColor = convert.rgb.ansi256(this.red, this.green, this.blue);
 
-      Color[_ansiCache].set(serialized, ansiColor)
+      Color[_ansiCache].set(serialized, ansiColor);
     }
 
-    return ansiColor
+    return ansiColor;
   }
 
   /**
    * @override
    */
   toString() {
-    return Color.serialize(this)
+    return Color.serialize(this);
   }
 
   /**
@@ -162,7 +163,7 @@ class Color {
    * @public
    */
   get alpha() {
-    return this[_alpha]
+    return this[_alpha];
   }
 
   /**
@@ -172,7 +173,7 @@ class Color {
    * @public
    */
   get blue() {
-    return this[_blue]
+    return this[_blue];
   }
 
   /**
@@ -182,7 +183,7 @@ class Color {
    * @public
    */
   get green() {
-    return this[_green]
+    return this[_green];
   }
 
   /**
@@ -192,7 +193,7 @@ class Color {
    * @public
    */
   get red() {
-    return this[_red]
+    return this[_red];
   }
 
 }
@@ -206,6 +207,6 @@ class Color {
  * @static
  * @type {Map.<string, number>}
  */
-Color[_ansiCache] = new Map()
+Color[_ansiCache] = new Map();
 
-module.exports = Color
+module.exports = Color;

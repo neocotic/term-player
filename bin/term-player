@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +17,9 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const CommandLineInterface = require('../src/CommandLineInterface')
+const CommandLineInterface = require('../src/CommandLineInterface');
 
 module.exports = new CommandLineInterface()
-  .parse(process.argv)
+  .parse(process.argv);

@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,22 +15,22 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const ffmpeg = require('fluent-ffmpeg')
-const GifReader = require('omggif').GifReader
-const Writable = require('stream').Writable
+const ffmpeg = require('fluent-ffmpeg');
+const GifReader = require('omggif').GifReader;
+const Writable = require('stream').Writable;
 
-const Dimension = require('../Dimension')
-const Frame = require('../frame/Frame')
-const MediaReader = require('./MediaReader')
+const Dimension = require('../Dimension');
+const Frame = require('../frame/Frame');
+const MediaReader = require('./MediaReader');
 
-const _createWritable = Symbol('createWritable')
-const _destroyCommand = Symbol('destroyCommand')
-const _probe = Symbol('probe')
-const _probeCache = Symbol('probeCache')
-const _probeCommand = Symbol('probeCommand')
-const _runCommand = Symbol('runCommand')
+const _createWritable = Symbol('createWritable');
+const _destroyCommand = Symbol('destroyCommand');
+const _probe = Symbol('probe');
+const _probeCache = Symbol('probeCache');
+const _probeCommand = Symbol('probeCommand');
+const _runCommand = Symbol('runCommand');
 
 /**
  * A {@link MediaReader} implementation that uses the FFmpeg tool to read the media file information and content.
@@ -47,23 +48,23 @@ class FFmpegMediaReader extends MediaReader {
    * @public
    */
   constructor(filePath, options) {
-    super(filePath, options)
+    super(filePath, options);
 
-    this[_probeCache] = null
-    this[_probeCommand] = null
-    this[_runCommand] = null
+    this[_probeCache] = null;
+    this[_probeCommand] = null;
+    this[_runCommand] = null;
   }
 
   /**
    * @override
    */
   destroy() {
-    this[_probeCache] = null
+    this[_probeCache] = null;
 
-    this[_destroyCommand](_probeCommand)
-    this[_destroyCommand](_runCommand)
+    this[_destroyCommand](_probeCommand);
+    this[_destroyCommand](_runCommand);
 
-    return super.destroy()
+    return super.destroy();
   }
 
   /**
@@ -72,10 +73,10 @@ class FFmpegMediaReader extends MediaReader {
   readDimension() {
     return this[_probe]()
       .then((data) => {
-        const stream = data.streams[0]
+        const stream = data.streams[0];
 
-        return new Dimension(stream.width, stream.height)
-      })
+        return new Dimension(stream.width, stream.height);
+      });
   }
 
   /**
@@ -84,18 +85,18 @@ class FFmpegMediaReader extends MediaReader {
   readFrames(dimension) {
     return new Promise((resolve, reject) => {
       if (this[_runCommand]) {
-        this[_runCommand].kill()
+        this[_runCommand].kill();
       }
 
-      const output = this[_createWritable](resolve, reject)
+      const output = this[_createWritable](resolve, reject);
 
-      this[_runCommand] = ffmpeg(this.filePath)
+      this[_runCommand] = ffmpeg(this.filePath);
 
       if (this.codec) {
-        this[_runCommand] = this[_runCommand].videoCodec(this.codec)
+        this[_runCommand] = this[_runCommand].videoCodec(this.codec);
       }
       if (this.format) {
-        this[_runCommand] = this[_runCommand].inputFormat(this.format)
+        this[_runCommand] = this[_runCommand].inputFormat(this.format);
       }
 
       // Convert media to GIF to fit the display screen so that each frame can be painted individually
@@ -106,29 +107,29 @@ class FFmpegMediaReader extends MediaReader {
         .size(`${dimension}`)
         .output(output, { end: true })
         .on('error', reject)
-        .run()
+        .run();
 
-      this.emit('start')
-    })
+      this.emit('start');
+    });
   }
 
   /**
    * @override
    */
   readTitle() {
-    let defaultTitle
+    let defaultTitle;
 
     return super.readTitle()
       .then((title) => {
-        defaultTitle = title
+        defaultTitle = title;
 
-        return this[_probe]()
+        return this[_probe]();
       })
       .then((data) => {
-        const title = data.format.tags && data.format.tags.title
+        const title = data.format.tags && data.format.tags.title;
 
-        return title || defaultTitle
-      })
+        return title || defaultTitle;
+      });
   }
 
   /**
@@ -141,38 +142,38 @@ class FFmpegMediaReader extends MediaReader {
    */
   [_createWritable](resolve, reject) {
     // TODO: Try to support better buffering than waiting for all chunks to be read to support streaming
-    let buffer = new Buffer(0)
+    let buffer = new Buffer(0);
     const output = new Writable({
       write(chunk, encoding, next) {
-        buffer = Buffer.concat([ buffer, chunk ])
+        buffer = Buffer.concat([ buffer, chunk ]);
 
-        return next()
+        return next();
       }
-    })
+    });
 
-    output.on('error', reject)
+    output.on('error', reject);
     output.on('finish', () => {
-      const gifReader = new GifReader(new Uint8Array(buffer))
-      const frameCount = gifReader.numFrames()
-      const frameSize = gifReader.width * gifReader.height * 4
-      const frames = []
+      const gifReader = new GifReader(new Uint8Array(buffer));
+      const frameCount = gifReader.numFrames();
+      const frameSize = gifReader.width * gifReader.height * 4;
+      const frames = [];
 
       for (let i = 0; i < frameCount; i++) {
-        const pixels = new Uint8Array(frameSize)
-        gifReader.decodeAndBlitFrameRGBA(i, pixels)
+        const pixels = new Uint8Array(frameSize);
+        gifReader.decodeAndBlitFrameRGBA(i, pixels);
 
-        const frame = new Frame(i, pixels, gifReader.width, gifReader.height)
-        frames.push(frame)
+        const frame = new Frame(i, pixels, gifReader.width, gifReader.height);
+        frames.push(frame);
 
-        this.emit('frame', frame)
+        this.emit('frame', frame);
       }
 
-      this.emit('finish', frames)
+      this.emit('finish', frames);
 
-      return resolve(frames)
-    })
+      return resolve(frames);
+    });
 
-    return output
+    return output;
   }
 
   /**
@@ -185,9 +186,9 @@ class FFmpegMediaReader extends MediaReader {
    */
   [_destroyCommand](field) {
     if (this[field]) {
-      this[field].kill()
+      this[field].kill();
 
-      this[field] = null
+      this[field] = null;
     }
   }
 
@@ -202,26 +203,26 @@ class FFmpegMediaReader extends MediaReader {
    */
   [_probe]() {
     if (this[_probeCache]) {
-      return Promise.resolve(this[_probeCache])
+      return Promise.resolve(this[_probeCache]);
     }
 
     return new Promise((resolve, reject) => {
       if (!this[_probeCommand]) {
-        this[_probeCommand] = ffmpeg(this.filePath)
+        this[_probeCommand] = ffmpeg(this.filePath);
       }
 
       this[_probeCommand].ffprobe((error, data) => {
         if (error) {
-          return reject(error)
+          return reject(error);
         }
 
-        this[_probeCache] = data
+        this[_probeCache] = data;
 
-        return resolve(data)
-      })
-    })
+        return resolve(data);
+      });
+    });
   }
 
 }
 
-module.exports = FFmpegMediaReader
+module.exports = FFmpegMediaReader;

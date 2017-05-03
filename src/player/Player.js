@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +15,14 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const Destroyable = require('../Destroyable')
-const FrameSet = require('../frame/FrameSet')
-const PlayerState = require('./PlayerState')
-const Utilities = require('../util/Utilities')
+const Destroyable = require('../Destroyable');
+const FrameSet = require('../frame/FrameSet');
+const PlayerState = require('./PlayerState');
+const Utilities = require('../util/Utilities');
 
-const _state = Symbol('stateSymbol')
+const _state = Symbol('stateSymbol');
 
 // TODO: Support playing static images (slideshows?)
 
@@ -39,9 +40,9 @@ class Player extends Destroyable {
    * @public
    */
   constructor() {
-    super()
+    super();
 
-    this[_state] = PlayerState.STOPPED
+    this[_state] = PlayerState.STOPPED;
 
     /**
      * The {@link Controller} controlling this {@link Player}.
@@ -51,7 +52,7 @@ class Player extends Destroyable {
      * @public
      * @type {?Controller}
      */
-    this.controller = null
+    this.controller = null;
   }
 
   /**
@@ -67,7 +68,7 @@ class Player extends Destroyable {
    * @abstract
    */
   getMediaReader(filePath, options) {
-    Utilities.throwUnimplemented('Player', 'getMediaReader')
+    Utilities.throwUnimplemented('Player', 'getMediaReader');
   }
 
   /**
@@ -79,19 +80,19 @@ class Player extends Destroyable {
    * @public
    */
   getTitle(filePath, options) {
-    const mediaReader = this.getMediaReader(filePath, options)
+    const mediaReader = this.getMediaReader(filePath, options);
 
     return mediaReader.readTitle()
       .then((title) => {
-        mediaReader.destroy()
+        mediaReader.destroy();
 
-        return title
+        return title;
       })
       .catch((error) => {
-        mediaReader.destroy()
+        mediaReader.destroy();
 
-        throw error
-      })
+        throw error;
+      });
   }
 
   /**
@@ -104,28 +105,28 @@ class Player extends Destroyable {
    * @public
    */
   play(filePath, options) {
-    const frameSet = new FrameSet()
-    const mediaReader = this.getMediaReader(filePath, options)
+    const frameSet = new FrameSet();
+    const mediaReader = this.getMediaReader(filePath, options);
 
-    this[_state] = PlayerState.PLAYING
+    this[_state] = PlayerState.PLAYING;
 
-    mediaReader.on('frame', frameSet.add.bind(frameSet))
-    mediaReader.on('finish', frameSet.finalize.bind(frameSet))
+    mediaReader.on('frame', frameSet.add.bind(frameSet));
+    mediaReader.on('finish', frameSet.finalize.bind(frameSet));
 
     return mediaReader.readDimension()
       .then((dimension) => {
-        return mediaReader.readFrames(dimension)
+        return mediaReader.readFrames(dimension);
       })
       .then(() => {
-        mediaReader.destroy()
+        mediaReader.destroy();
 
-        return frameSet
+        return frameSet;
       })
       .catch((error) => {
-        mediaReader.destroy()
+        mediaReader.destroy();
 
-        throw error
-      })
+        throw error;
+      });
   }
 
   /**
@@ -138,7 +139,7 @@ class Player extends Destroyable {
    * @public
    */
   get paused() {
-    return this[_state] === PlayerState.PAUSED
+    return this[_state] === PlayerState.PAUSED;
   }
 
   /**
@@ -153,7 +154,7 @@ class Player extends Destroyable {
    */
   set paused(paused) {
     if (paused) {
-      this[_state] = PlayerState.PAUSED
+      this[_state] = PlayerState.PAUSED;
     }
   }
 
@@ -164,7 +165,7 @@ class Player extends Destroyable {
    * @public
    */
   get playing() {
-    return this[_state] === PlayerState.PLAYING
+    return this[_state] === PlayerState.PLAYING;
   }
 
   /**
@@ -179,7 +180,7 @@ class Player extends Destroyable {
    */
   set playing(playing) {
     if (playing) {
-      this[_state] = PlayerState.PLAYING
+      this[_state] = PlayerState.PLAYING;
     }
   }
 
@@ -193,7 +194,7 @@ class Player extends Destroyable {
    * @public
    */
   get stopped() {
-    return this[_state] === PlayerState.STOPPED
+    return this[_state] === PlayerState.STOPPED;
   }
 
   /**
@@ -208,10 +209,10 @@ class Player extends Destroyable {
    */
   set stopped(stopped) {
     if (stopped) {
-      this[_state] = PlayerState.STOPPED
+      this[_state] = PlayerState.STOPPED;
     }
   }
 
 }
 
-module.exports = Player
+module.exports = Player;

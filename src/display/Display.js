@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,25 +15,25 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const numeral = require('numeral')
+const numeral = require('numeral');
 
-const CommandLineInterface = require('../CommandLineInterface')
-const Destroyable = require('../Destroyable')
-const Utilities = require('../util/Utilities')
+const CommandLineInterface = require('../CommandLineInterface');
+const Destroyable = require('../Destroyable');
+const Utilities = require('../util/Utilities');
 
-const _currentFrame = Symbol('currentFrame')
-const _defaultTitle = Symbol('defaultTitle')
-const _frameSet = Symbol('frameSet')
-const _frozen = Symbol('frozen')
-const _paintNextFrame = Symbol('paintNextFrame')
-const _refreshId = Symbol('refreshId')
-const _refreshRate = Symbol('refreshRate')
-const _status = Symbol('status')
-const _statuses = Symbol('statuses')
-const _title = Symbol('title')
-const _updateStatus = Symbol('updateStatus')
+const _currentFrame = Symbol('currentFrame');
+const _defaultTitle = Symbol('defaultTitle');
+const _frameSet = Symbol('frameSet');
+const _frozen = Symbol('frozen');
+const _paintNextFrame = Symbol('paintNextFrame');
+const _refreshId = Symbol('refreshId');
+const _refreshRate = Symbol('refreshRate');
+const _status = Symbol('status');
+const _statuses = Symbol('statuses');
+const _title = Symbol('title');
+const _updateStatus = Symbol('updateStatus');
 
 /**
  * A display which paints frames onto the terminal.
@@ -49,20 +50,20 @@ class Display extends Destroyable {
    * @public
    */
   constructor(options) {
-    super()
+    super();
 
     if (options == null) {
-      options = {}
+      options = {};
     }
 
-    this[_currentFrame] = null
-    this[_defaultTitle] = options.title || CommandLineInterface.NAME
-    this[_frameSet] = null
-    this[_frozen] = true
-    this[_refreshId] = null
-    this[_refreshRate] = options.refreshRate || 10
-    this.status = options.status
-    this.title = options.title
+    this[_currentFrame] = null;
+    this[_defaultTitle] = options.title || CommandLineInterface.NAME;
+    this[_frameSet] = null;
+    this[_frozen] = true;
+    this[_refreshId] = null;
+    this[_refreshRate] = options.refreshRate || 10;
+    this.status = options.status;
+    this.title = options.title;
 
     /**
      * The {@link Controller} controlling this {@link Display}.
@@ -72,16 +73,16 @@ class Display extends Destroyable {
      * @public
      * @type {?Controller}
      */
-    this.controller = null
+    this.controller = null;
   }
 
   /**
    * @override
    */
   destroy() {
-    this.unload()
+    this.unload();
 
-    return super.destroy()
+    return super.destroy();
   }
 
   /**
@@ -94,7 +95,7 @@ class Display extends Destroyable {
    * @abstract
    */
   getDimension() {
-    Utilities.throwUnimplemented('Display', 'getDimension')
+    Utilities.throwUnimplemented('Display', 'getDimension');
   }
 
   /**
@@ -106,7 +107,7 @@ class Display extends Destroyable {
    * @public
    */
   hideHelp() {
-    return this
+    return this;
   }
 
   /**
@@ -119,7 +120,7 @@ class Display extends Destroyable {
    * @abstract
    */
   isRendered() {
-    Utilities.throwUnimplemented('Display', 'isRendered')
+    Utilities.throwUnimplemented('Display', 'isRendered');
   }
 
   /**
@@ -132,7 +133,7 @@ class Display extends Destroyable {
    * @abstract
    */
   isShowingHelp() {
-    Utilities.throwUnimplemented('Display', 'isShowingHelp')
+    Utilities.throwUnimplemented('Display', 'isShowingHelp');
   }
 
   /**
@@ -148,15 +149,15 @@ class Display extends Destroyable {
    */
   load(frameSet) {
     if (this[_frameSet]) {
-      throw new Error('Existing frame set has not been unloaded')
+      throw new Error('Existing frame set has not been unloaded');
     }
 
-    this[_frameSet] = frameSet
-    this.frozen = false
+    this[_frameSet] = frameSet;
+    this.frozen = false;
 
-    this[_updateStatus]()
+    this[_updateStatus]();
 
-    return this
+    return this;
   }
 
   /**
@@ -172,7 +173,7 @@ class Display extends Destroyable {
    * @abstract
    */
   paint(frame, currentFrame) {
-    Utilities.throwUnimplemented('Display', 'paint')
+    Utilities.throwUnimplemented('Display', 'paint');
   }
 
   /**
@@ -184,7 +185,7 @@ class Display extends Destroyable {
    * @public
    */
   render() {
-    return this
+    return this;
   }
 
   /**
@@ -196,7 +197,7 @@ class Display extends Destroyable {
    * @public
    */
   showHelp() {
-    return this
+    return this;
   }
 
   /**
@@ -207,13 +208,13 @@ class Display extends Destroyable {
    * @public
    */
   unload() {
-    this.frozen = true
-    this.title = null
-    this[_frameSet] = null
+    this.frozen = true;
+    this.title = null;
+    this[_frameSet] = null;
 
-    this[_updateStatus]()
+    this[_updateStatus]();
 
-    return this
+    return this;
   }
 
   /**
@@ -227,7 +228,7 @@ class Display extends Destroyable {
    * @abstract
    */
   update() {
-    Utilities.throwUnimplemented('Display', 'update')
+    Utilities.throwUnimplemented('Display', 'update');
   }
 
   /**
@@ -249,19 +250,19 @@ class Display extends Destroyable {
    */
   [_paintNextFrame]() {
     if (this.frozen || !(this.isRendered() && this[_frameSet].hasNext())) {
-      return
+      return;
     }
 
-    const currentFrame = this[_currentFrame]
-    const frame = this[_frameSet].next()
+    const currentFrame = this[_currentFrame];
+    const frame = this[_frameSet].next();
 
-    this[_currentFrame] = frame
+    this[_currentFrame] = frame;
 
-    this[_updateStatus](frame)
-    this.paint(frame, currentFrame)
+    this[_updateStatus](frame);
+    this.paint(frame, currentFrame);
 
     if (!this[_frameSet].hasNext() && this[_frameSet].finalized) {
-      this.controller.stop()
+      this.controller.stop();
     }
   }
 
@@ -275,12 +276,12 @@ class Display extends Destroyable {
   [_updateStatus](frame) {
     this.status = Array.from(Display[_statuses].entries())
       .map((entry) => {
-        const key = entry[0]
-        const value = entry[1](this, frame)
+        const key = entry[0];
+        const value = entry[1](this, frame);
 
-        return `${key}: ${value != null ? value : '?'}`
+        return `${key}: ${value != null ? value : '?'}`;
       })
-      .join(' | ')
+      .join(' | ');
   }
 
   /**
@@ -290,7 +291,7 @@ class Display extends Destroyable {
    * @public
    */
   get frozen() {
-    return this[_frozen]
+    return this[_frozen];
   }
 
   /**
@@ -304,14 +305,14 @@ class Display extends Destroyable {
    * @public
    */
   set frozen(frozen) {
-    this[_frozen] = Boolean(frozen)
+    this[_frozen] = Boolean(frozen);
 
     if (!this[_frozen]) {
-      this[_refreshId] = setInterval(this[_paintNextFrame].bind(this), this.refreshRate)
+      this[_refreshId] = setInterval(this[_paintNextFrame].bind(this), this.refreshRate);
     } else if (this[_refreshId]) {
-      clearInterval(this[_refreshId])
+      clearInterval(this[_refreshId]);
 
-      this[_refreshId] = null
+      this[_refreshId] = null;
     }
   }
 
@@ -322,7 +323,7 @@ class Display extends Destroyable {
    * @public
    */
   get refreshRate() {
-    return this[_refreshRate]
+    return this[_refreshRate];
   }
 
   /**
@@ -332,7 +333,7 @@ class Display extends Destroyable {
    * @public
    */
   get status() {
-    return this[_status]
+    return this[_status];
   }
 
   /**
@@ -342,10 +343,10 @@ class Display extends Destroyable {
    * @public
    */
   set status(status) {
-    this[_status] = status || ''
+    this[_status] = status || '';
 
     if (this.isRendered()) {
-      this.update()
+      this.update();
     }
   }
 
@@ -356,7 +357,7 @@ class Display extends Destroyable {
    * @public
    */
   get title() {
-    return this[_title]
+    return this[_title];
   }
 
   /**
@@ -370,10 +371,10 @@ class Display extends Destroyable {
    * @public
    */
   set title(title) {
-    this[_title] = title || this[_defaultTitle]
+    this[_title] = title || this[_defaultTitle];
 
     if (this.isRendered()) {
-      this.update()
+      this.update();
     }
   }
 
@@ -386,30 +387,30 @@ class Display extends Destroyable {
  * @static
  * @type {Map.<string, Display~StatusCallback>}
  */
-Display[_statuses] = new Map()
-Display[_statuses].set('Display Res', (display) => display.getDimension())
-Display[_statuses].set('Media Res', (display, frame) => frame && frame.dimension)
+Display[_statuses] = new Map();
+Display[_statuses].set('Display Res', (display) => display.getDimension());
+Display[_statuses].set('Media Res', (display, frame) => frame && frame.dimension);
 Display[_statuses].set('Frames', (display) => {
   if (!display[_frameSet] || !display[_frameSet].finalized) {
-    return null
+    return null;
   }
 
-  const total = display[_frameSet].totalLength
-  const current = total - display[_frameSet].length
+  const total = display[_frameSet].totalLength;
+  const current = total - display[_frameSet].length;
 
-  return numeral(current / total).format('0%')
-})
+  return numeral(current / total).format('0%');
+});
 Display[_statuses].set('RAM', () => {
-  const format = '0.0b'
-  const memory = process.memoryUsage()
-  const total = numeral(memory.heapTotal).format(format)
-  const used = numeral(memory.heapUsed).format(format)
+  const format = '0.0b';
+  const memory = process.memoryUsage();
+  const total = numeral(memory.heapTotal).format(format);
+  const used = numeral(memory.heapUsed).format(format);
 
-  return `${used}/${total}`
-})
-Display[_statuses].set('Help', () => 'Press "?"')
+  return `${used}/${total}`;
+});
+Display[_statuses].set('Help', () => 'Press "?"');
 
-module.exports = Display
+module.exports = Display;
 
 /**
  * The options for the {@link Display} constructor.

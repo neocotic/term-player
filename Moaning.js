@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017 Alasdair Mercer
  * Copyright 2017 SecureWorks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,17 +15,17 @@
  * limitations under the License.
  */
 
-'use strict'
+'use strict';
 
-const moan = require('moan')
+const moan = require('moan');
 
 moan.fileSet('lintFiles', [
   'src/',
   'task/',
   'Moaning.js'
-])
+]);
 
-moan.task('lint', require('./task/lint'))
+moan.task('lint', require('./task/lint'));
 
-moan.task('default', 'test')
-moan.task('test', 'lint')
+moan.task('default', 'test');
+moan.task('test', 'lint');
